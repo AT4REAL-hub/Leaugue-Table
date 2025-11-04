@@ -1,1 +1,218 @@
 # Leaugue-Table
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>League Points Table</title>
+<style>
+  :root {
+    --bg:#0f1113;
+    --card:#0f1720;
+    --accent:#ff6b6b;
+    --muted:#9aa5b1;
+    --glass: rgba(255,255,255,0.03);
+    --accent2:#ff8fa3;
+    --success:#7de29b;
+    --text:#e6eef3;
+  }
+
+  [data-theme="light"] {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --accent: #ff6b6b;
+    --accent2: #ff8fa3;
+    --muted: #6b7280;
+    --glass: rgba(0,0,0,0.03);
+    --text: #111827;
+    --success: #16a34a;
+  }
+
+  * { box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    margin:0;
+    font-family: "Segoe UI", Tahoma, system-ui, -apple-system, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,var(--bg) 0%, #0a0d12 60%);
+    color: var(--text);
+    padding:28px;
+    direction:rtl;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .container { max-width:980px; margin:0 auto; }
+  header.app-header {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;
+  }
+  header h1 { margin:0; font-size:20px; letter-spacing:1px; }
+  header .round { color:var(--muted); font-size:13px; }
+
+  .theme-toggle {
+    cursor:pointer;
+    padding:6px 12px;
+    border-radius:8px;
+    background: var(--glass);
+    border:1px solid rgba(0,0,0,0.1);
+    font-weight:600;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .table-wrap {
+    background: var(--card);
+    border-radius:14px;
+    padding:14px;
+    box-shadow: 0 8px 30px rgba(2,6,10,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+    border:1px solid rgba(0,0,0,0.05);
+    overflow:hidden;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .head-row, .row {
+    display:grid;
+    grid-template-columns: 56px 48px 1fr repeat(6,72px);
+    gap:10px;
+    align-items:center;
+    padding:12px 6px;
+  }
+
+  .head-row {
+    border-bottom:1px solid rgba(0,0,0,0.1);
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  .row {
+    border-bottom:1px dashed rgba(0,0,0,0.05);
+    transition: background .18s, transform .08s;
+  }
+
+  .row:hover {
+    background: linear-gradient(90deg, rgba(255,111,111,0.03), rgba(110,110,140,0.01));
+    transform: translateY(-2px);
+  }
+
+  .pos {
+    font-weight:700;
+    font-size:18px;
+    justify-self:center;
+    width:44px; height:44px;
+    display:grid; place-items:center;
+    border-radius:8px;
+    background: var(--glass);
+    color: var(--accent);
+    border:1px solid rgba(0,0,0,0.05);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .row.top1 .pos { background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#081018; }
+  .row.top2 .pos { background: linear-gradient(90deg,#ffd166,#ff9f1c); color:#081018; }
+
+  .logo-slot {
+    width:44px; height:44px;
+    border-radius:6px;
+    background: var(--glass);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+
+  .logo-slot img { width:36px; height:36px; object-fit:contain; }
+
+  .team { padding-inline-start:8px; font-weight:700; font-size:15px; }
+  .cell { justify-self:center; font-weight:600; }
+  .netrr { font-family:monospace; justify-self:center; }
+  .pts {
+    justify-self:center;
+    font-size:16px;
+    font-weight:900;
+    padding:6px 10px;
+    border-radius:12px;
+    background: var(--glass);
+    border:1px solid rgba(0,0,0,0.05);
+    min-width:56px;
+    text-align:center;
+    transition: background 0.3s, color 0.3s;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <h1>League — جدول النقاط</h1>
+      <div>
+        <span class="round">الجولة: 2</span>
+        <button class="theme-toggle" id="themeToggle">تبديل الوضع</button>
+      </div>
+    </header>
+    <section class="table-wrap">
+      <div class="head-row">
+        <div>ترتيب</div><div>شعار</div><div>الفريق</div>
+        <div>لعب</div><div>فاز</div><div>خسر</div><div>تعادل</div><div>صافي RR</div><div>نقاط</div>
+      </div>
+
+      <div class="row top1">
+        <div class="pos">1</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg" alt="AC Milan logo"></div>
+        <div class="team">CHARCHABIL</div>
+        <div class="cell">2</div><div class="cell">2</div><div class="cell">0</div><div class="cell">0</div><div class="netrr">+10</div><div class="pts">6</div>
+      </div>
+
+      <div class="row top2">
+        <div class="pos">2</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg" alt="Real Madrid logo"></div>
+        <div class="team">AT4REAL</div>
+        <div class="cell">2</div><div class="cell">2</div><div class="cell">0</div><div class="cell">0</div><div class="netrr">+6</div><div class="pts">6</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">3</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg" alt="Arsenal logo"></div>
+        <div class="team">PROTOX</div>
+        <div class="cell">2</div><div class="cell">1</div><div class="cell">0</div><div class="cell">1</div><div class="netrr">+1</div><div class="pts">4</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">4</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg" alt="Liverpool logo"></div>
+        <div class="team">GRENDAYZER</div>
+        <div class="cell">2</div><div class="cell">1</div><div class="cell">1</div><div class="cell">0</div><div class="netrr">+1</div><div class="pts">3</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">5</div>
+        <div class="logo-slot"><img src="https://brandlogos.net/wp-content/uploads/2014/11/fc-bayern-munich-logo.png" alt="Bayern Munich logo"></div>
+        <div class="team">MEDGRËEN</div>
+        <div class="cell">2</div><div class="cell">1</div><div class="cell">1</div><div class="cell">0</div><div class="netrr">-3</div><div class="pts">3</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">6</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg" alt="FC Barcelona logo"></div>
+        <div class="team">ALIZAC</div>
+        <div class="cell">2</div><div class="cell">0</div><div class="cell">1</div><div class="cell">1</div><div class="netrr">-5</div><div class="pts">1</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">7</div>
+        <div class="logo-slot"><img src="https://cdn.freebiesupply.com/logos/large/2x/santos-fc-logo-black-and-white.png" alt="Santos FC logo"></div>
+        <div class="team">DEXTER</div>
+        <div class="cell">2</div><div class="cell">0</div><div class="cell">2</div><div class="cell">0</div><div class="netrr">-4</div><div class="pts">0</div>
+      </div>
+
+      <div class="row">
+        <div class="pos">8</div>
+        <div class="logo-slot"><img src="https://upload.wikimedia.org/wikipedia/fr/thumb/9/9f/Logo_Juventus.svg/2088px-Logo_Juventus.svg.png" alt="Juventus logo"></div>
+        <div class="team">MICROUB</div>
+        <div class="cell">2</div><div class="cell">0</div><div class="cell">2</div><div class="cell">0</div><div class="netrr">-6</div><div class="pts">0</div>
+      </div>
+
+    </section>
+  </div>
+
+<script>
+  const toggleBtn = document.getElementById('themeToggle');
+  toggleBtn.addEventListener('click', () => {
+    document.body.dataset.theme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+  });
+</script>
+</body>
+</html>
